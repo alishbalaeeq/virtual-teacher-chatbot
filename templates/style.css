@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Set the body height to fill the viewport */
+    overflow: hidden; /* Hide any overflow content */
+    display: flex;
+    flex-direction: column; /* Align items in a column */
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire background */
+    z-index: -1;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px; /* Adjust top margin */
+    color: white; /* Adjust text color for better visibility */
+    font-size: 36px; /* Increase font size */
+    text-shadow: 2px 2px 4px #db593c; /* Add text shadow for better contrast */
+    z-index: 1;
+}
+
+#chat-history {
+    display: flex;
+    flex-direction: column; /* Reverse the order of chat messages */
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+}
+
+.user-audio {
+    position: relative; /* Set position relative */
+    z-index: 2; /* Set a higher z-index value */
+    text-align: right;
+    background-color: rgba(219, 89, 60, 0.8); /* Use rgba color with transparency */
+    padding: 8px;
+    border-radius: 8px;
+    max-width: 100%;
+}
+
+.bot-audio {
+    background-color: rgb(7, 242, 211);
+    position: relative; /* Set position relative */
+    z-index: 2; /* Set a higher z-index value */
+    text-align: right;
+    padding: 8px;
+    border-radius: 8px;
+    max-width: 100%;
+}
+
+.user-label {
+    color: rgb(144, 57, 3); /* Blue color for user label */
+}
+
+.bot-label {
+    color: rgb(14, 86, 209); /* Green color for bot label */
+}
+
+#record-button {
+    display: none; /* Hide record button initially */
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#start-button {
+    width: 150px; /* Set width and height to create a perfect circle */
+    height: 150px;
+    border-radius: 50%; /* Make button round */
+    background-color: #db593c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    outline: none; /* Remove outline on focus */
+    z-index: 1;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 50px; /* Add margin top */
+}
