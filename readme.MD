@@ -25,7 +25,7 @@ The **Virtual Teacher Chatbot** is a speech-to-speech AI-powered application tha
 1. **Clone the Repository**:
 
    ```sh
-   git clone https://github.com/yourusername/virtual-teacher-chatbot.git
+   git clone https://github.com/alishbalaeeq/virtual-teacher-chatbot.git
    cd virtual-teacher-chatbot
    ```
 
