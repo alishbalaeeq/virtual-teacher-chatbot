@@ -47,7 +47,7 @@ h1 {
 }
 
 .bot-audio {
-    background-color: rgb(7, 242, 211);
+    background-color: rgb(212 217 36);
     position: relative; /* Set position relative */
     z-index: 2; /* Set a higher z-index value */
     text-align: right;
@@ -57,11 +57,11 @@ h1 {
 }
 
 .user-label {
-    color: rgb(144, 57, 3); /* Blue color for user label */
+    color: rgb(0 0 0); /* Blue color for user label */
 }
 
 .bot-label {
-    color: rgb(14, 86, 209); /* Green color for bot label */
+    color: rgb(0, 0, 0); /* Green color for bot label */
 }
 
 #record-button {
