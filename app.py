@@ -59,29 +59,62 @@ async def favicon():
 
 
 @app.post("/chat")
-async def chat(voice_chat: UploadFile = File(...)):
-    if not voice_chat:
-        return JSONResponse(content={"error": "No voice chat found"}, status_code=400)
-
-    raw_file_path = os.path.join(FILES_DIR, voice_chat.filename)
-    output_file_path = os.path.join(FILES_DIR, "student.wav")
-    generated_response_path = os.path.join(FILES_DIR, "Response.wav")
-
+async def chat(voice_chat: UploadFile = File(...), topic: str = Form(...)):
     try:
+        print(f"📢 Received file: {voice_chat.filename}, Size: {voice_chat.size}")
+        print(f"📌 Topic received: {topic}")
+
+        raw_file_path = os.path.join(FILES_DIR, voice_chat.filename)
+        output_file_path = os.path.join(FILES_DIR, "student.wav")
+        generated_response_path = os.path.join(FILES_DIR, "Response.wav")
+
+        # Save received file
         with open(raw_file_path, "wb") as f:
             f.write(await voice_chat.read())
 
-        audio = AudioSegment.from_file(raw_file_path)
-        audio = audio.set_frame_rate(16000).set_channels(1)
-        audio.export(output_file_path, format="wav")
+        # Convert audio format
+        try:
+            audio = AudioSegment.from_file(raw_file_path)
+            audio = audio.set_frame_rate(16000).set_channels(1)
+            audio.export(output_file_path, format="wav")
+        except Exception as audio_error:
+            print(f"❌ Audio processing failed: {audio_error}")
+            return JSONResponse(content={"error": f"Audio processing failed: {audio_error}"}, status_code=500)
 
-        question_text = speech_to_text(output_file_path)
-        response_text = generation_model(question_text)
-        text_to_speech("en-IE-EmilyNeural", response_text, generated_response_path)
+        # Speech-to-text (STT)
+        try:
+            from utils.stt import speech_to_text  # Ensure this is correctly imported
+            question_text = speech_to_text(output_file_path)
+        except Exception as stt_error:
+            print(f"❌ Speech-to-text failed: {stt_error}")
+            return JSONResponse(content={"error": f"Speech-to-text failed: {stt_error}"}, status_code=500)
 
-        return FileResponse(generated_response_path, media_type="audio/wav", filename="Response.wav")
+        # Generate response using LLM
+        try:
+            from utils.llm import generation_model  # Ensure this is correctly imported
+            response_text = generation_model(question_text, topic)
+        except Exception as llm_error:
+            print(f"❌ LLM failed: {llm_error}")
+            return JSONResponse(content={"error": f"LLM generation failed: {llm_error}"}, status_code=500)
+
+        # Convert text response to speech
+        try:
+            text_to_speech("en-IE-EmilyNeural", response_text, generated_response_path)
+        except Exception as tts_error:
+            print(f"❌ Text-to-speech failed: {tts_error}")
+            return JSONResponse(content={"error": f"Text-to-speech failed: {tts_error}"}, status_code=500)
+
+        # Return response audio file
+        if os.path.exists(generated_response_path):
+            return FileResponse(generated_response_path, media_type="audio/wav", filename="Response.wav")
+        else:
+            print("❌ Response file not found.")
+            return JSONResponse(content={"error": "Response file not found"}, status_code=500)
+
     except Exception as e:
+        print(f"❌ General Error: {e}")
         return JSONResponse(content={"error": f"Failed to process file: {str(e)}"}, status_code=500)
+
 
 
 if __name__ == "__main__":

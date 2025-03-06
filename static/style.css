@@ -25,6 +25,31 @@ h1 {
     z-index: 1;
 }
 
+#loading-message {
+    display: none;
+    text-align: center;
+    padding: 15px;
+    background-color: transparent; /* No background */
+    border-radius: 8px;
+    margin: 20px auto;
+}
+
+/* Loader Animation */
+.loader {
+    border: 6px solid rgba(255, 255, 255, 0.2); /* Light gray border */
+    border-top: 6px solid #007bff; /* Blue spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto; /* Center it */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 #chat-history {
     display: flex;
     flex-direction: column; /* Reverse the order of chat messages */

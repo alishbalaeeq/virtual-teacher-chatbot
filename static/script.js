@@ -1,12 +1,17 @@
 const startButton = document.getElementById('start-button');
 const recordButton = document.getElementById('record-button');
 const chatHistory = document.getElementById('chat-history');
-const topicInput = document.getElementById('topic-input'); 
+const topicInput = document.getElementById('topic-input');
+const loadingMessage = document.getElementById('loading-message'); // Fix: Define the loading message
 
 let isRecording = false;
+let mediaRecorder;
+let audioChunks = [];
+
+// Hide the record button initially
+recordButton.style.display = 'none';
 
 document.addEventListener('DOMContentLoaded', function() {
-
     startButton.addEventListener('click', async function() {
         const topic = topicInput.value.trim();
         if (!topic) {
@@ -15,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         startButton.style.display = 'none';
+        recordButton.style.display = 'none'; // Ensure record button is hidden
+        loadingMessage.style.display = 'block'; // Show loading message
 
         try {
             const response = await fetch('/generate-lecture', {
@@ -29,16 +36,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const audioBlob = await response.blob();
             const audioUrl = URL.createObjectURL(audioBlob);
+
+            // Create a wrapper div for the lecture message
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('chat-message', 'bot-audio'); // Use bot-audio styling
+
+            // Add "Lecture" label
+            const lectureLabel = document.createElement('span');
+            lectureLabel.textContent = 'Lecture';
+            lectureLabel.classList.add('bot-label'); // Use bot-label styling
+
+            // Create and configure audio element
             const audioElement = document.createElement('audio');
             audioElement.src = audioUrl;
             audioElement.controls = true;
             audioElement.autoplay = true;
 
-            chatHistory.appendChild(audioElement);
+            // Append label and audio to the message container
+            messageContainer.appendChild(lectureLabel);
+            messageContainer.appendChild(audioElement);
+            chatHistory.appendChild(messageContainer);
+
+            // Ensure the chat history scrolls to the latest message
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Hide loading message & show record button after lecture is generated
+            loadingMessage.style.display = 'none';
+            recordButton.style.display = 'block'; // Make the record button visible
+
         } catch (error) {
             console.error('Error:', error);
             alert(error.message);
-            startButton.style.display = 'block';  // Re-display the start button if there's an error
+            startButton.style.display = 'block'; // Re-display the start button if there's an error
+            loadingMessage.style.display = 'none';
         }
     });
 });
@@ -46,12 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
 recordButton.addEventListener('click', toggleRecording);
 
 async function toggleRecording() {
-    // Record button toggles the recording state
     if (!isRecording) {
-        // Start recording
         startRecording();
     } else {
-        // Stop recording
         stopRecording();
     }
 }
@@ -59,16 +86,15 @@ async function toggleRecording() {
 async function startRecording() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const mediaRecorder = new MediaRecorder(stream);
-        const chunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
 
         mediaRecorder.addEventListener('dataavailable', event => {
-            chunks.push(event.data);
+            audioChunks.push(event.data);
         });
 
         mediaRecorder.addEventListener('stop', async () => {
-            // Process the recorded audio after stopping
-            processRecordedAudio(chunks);
+            await processRecordedAudio(audioChunks);
         });
 
         mediaRecorder.start();
@@ -80,13 +106,15 @@ async function startRecording() {
 }
 
 async function stopRecording() {
-    mediaRecorder.stop();
-    isRecording = false;
-    recordButton.textContent = 'Record / Stop';
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordButton.textContent = 'Record / Stop';
+    }
 }
 
-async function processRecordedAudio(chunks) {
-    const blob = new Blob(chunks, { type: 'audio/wav' });
+async function processRecordedAudio(audioChunks) {
+    const blob = new Blob(audioChunks, { type: 'audio/wav' });
     const audioUrl = URL.createObjectURL(blob);
     const audio = document.createElement('audio');
     audio.src = audioUrl;
@@ -96,7 +124,6 @@ async function processRecordedAudio(chunks) {
     messageContainer.classList.add('chat-message', 'user-audio');
     messageContainer.appendChild(audio);
 
-    // Add a user label
     const userLabel = document.createElement('span');
     userLabel.textContent = 'Student';
     userLabel.classList.add('user-label');
@@ -105,13 +132,14 @@ async function processRecordedAudio(chunks) {
     chatHistory.appendChild(messageContainer);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 
-    // Send the recorded audio to the server
     await sendAudioToServer(blob);
 }
 
 async function sendAudioToServer(blob) {
     const formData = new FormData();
+    const topic = document.getElementById('topic-input').value.trim();
     formData.append('voice_chat', blob, 'user_audio.wav');
+    formData.append('topic', topic);
 
     try {
         const response = await fetch('/chat', {

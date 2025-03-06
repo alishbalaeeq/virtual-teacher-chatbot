@@ -11,7 +11,12 @@
     <!-- Input for entering topic -->
     <input type="text" id="topic-input" placeholder="e.g., Climate Change">
     <button id="start-button">Confirm the topic</button>
-    <div id="chat-history"></div>
+    <div id="loading-message" style="display: none;">
+        <div class="loader"></div>
+        <p>Generating lecture... Please wait.</p>
+    </div>
+    
+        <div id="chat-history"></div>
     <button id="record-button">Record / Stop</button>
     <script src="/static/script.js"></script>
 </body>

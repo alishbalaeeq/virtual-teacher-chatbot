@@ -26,7 +26,7 @@ def speech_to_text(audio_file_path):
     audio_input = {"raw": waveform.numpy()[0], "sampling_rate": 16000} 
 
     # Generate transcription
-    prediction = pipe(audio_input, batch_size=16, language='en')["text"]
+    prediction = pipe(audio_input, batch_size=16)["text"]
 
     # Output the transcription
     return prediction
