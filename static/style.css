@@ -52,6 +52,7 @@ h1 {
     height: 40px;
     animation: spin 1s linear infinite;
     margin: 0 auto; /* Center it */
+    margin-top: 150px;
 }
 
 @keyframes spin {
@@ -61,12 +62,30 @@ h1 {
 
 #chat-history {
     display: flex;
-    flex-direction: column-reverse; /* Puts new messages at the bottom */
+    flex-direction: column; /* Puts new messages at the bottom */
     align-items: flex-start;
     padding: 20px;
     max-height: 400px; /* Set a max height for scrolling */
     overflow-y: auto; /* Enable vertical scrolling */
     scroll-behavior: smooth; /* Smooth scrolling */
+    margin-top: 50px;
+}
+
+#chat-history::-webkit-scrollbar {
+    width: 6px; /* Make it smaller */
+}
+
+#chat-history::-webkit-scrollbar-track {
+    background: transparent; /* Makes track invisible */
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2); /* Light transparent scrollbar */
+    border-radius: 10px; /* Rounded edges */
+}
+
+#chat-history::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3); /* Slightly more visible on hover */
 }
 
 .chat-message {
@@ -121,7 +140,7 @@ h1 {
     border-radius: 8px;
     text-align: center;
     margin-bottom: 15px;
-    margin-top: 30px;
+    margin-top: 150px;
     display: block;
 }
 

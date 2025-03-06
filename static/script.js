@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         startButton.style.display = 'none';
+        topicInput.style.display = 'none';
         recordButton.style.display = 'none'; // Ensure record button is hidden
         loadingMessage.style.display = 'block'; // Show loading message
 
