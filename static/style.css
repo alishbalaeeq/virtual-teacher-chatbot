@@ -25,11 +25,67 @@ h1 {
     z-index: 1;
 }
 
+#loading-message {
+    display: none;
+    text-align: center;
+    padding: 15px;
+    background-color: transparent; /* No background */
+    border-radius: 8px;
+    margin: 20px auto;
+}
+
+#loading-message p {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff; /* White text */
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 0.5px;
+    margin: 5px 0 0 0; /* Adjust spacing */
+}
+
+/* Loader Animation */
+.loader {
+    border: 6px solid rgba(255, 255, 255, 0.2); /* Light gray border */
+    border-top: 6px solid #007bff; /* Blue spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto; /* Center it */
+    margin-top: 150px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 #chat-history {
     display: flex;
-    flex-direction: column; /* Reverse the order of chat messages */
+    flex-direction: column; /* Puts new messages at the bottom */
     align-items: flex-start;
     padding: 20px;
+    max-height: 400px; /* Set a max height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Smooth scrolling */
+    margin-top: 50px;
+}
+
+#chat-history::-webkit-scrollbar {
+    width: 6px; /* Make it smaller */
+}
+
+#chat-history::-webkit-scrollbar-track {
+    background: transparent; /* Makes track invisible */
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2); /* Light transparent scrollbar */
+    border-radius: 10px; /* Rounded edges */
+}
+
+#chat-history::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3); /* Slightly more visible on hover */
 }
 
 .chat-message {
@@ -74,6 +130,18 @@ h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#topic-input {
+    padding: 12px;
+    font-size: 18px;
+    width: 300px;
+    border: 2px solid #db593c;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 150px;
+    display: block;
 }
 
 #start-button {

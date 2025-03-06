@@ -10,16 +10,12 @@ pipe = pipeline(
     "automatic-speech-recognition",
     model="openai/whisper-tiny",
     chunk_length_s=30,
-    device=device,
+    device=device
 )
 
 def speech_to_text(audio_file_path):
-
-    print(str(torchaudio.list_audio_backends()))
-
     # Load the audio file
     waveform, sampling_rate = torchaudio.load(audio_file_path)
-    print(f"Audio loaded! Shape: {waveform.shape}, Sample rate: {sampling_rate}")
 
     # Resample the audio to 16 kHz (Whisper expects this sampling rate)
     resampler = torchaudio.transforms.Resample(orig_freq=sampling_rate, new_freq=16000)

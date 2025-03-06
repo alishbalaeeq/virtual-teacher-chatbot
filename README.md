@@ -46,7 +46,7 @@ The **Virtual Teacher Chatbot** is a speech-to-speech AI-powered application tha
 4. **Run the Application**:
 
    ```sh
-   python app.py
+   uvicorn app:app --port 8000
    ```
 
 5. **Access the API**:
