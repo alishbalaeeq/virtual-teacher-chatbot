@@ -10,13 +10,10 @@ pipe = pipeline(
     "automatic-speech-recognition",
     model="openai/whisper-tiny",
     chunk_length_s=30,
-    device=device,
+    device=device
 )
 
 def speech_to_text(audio_file_path):
-
-    print(str(torchaudio.list_audio_backends()))
-
     # Load the audio file
     waveform, sampling_rate = torchaudio.load(audio_file_path)
     print(f"Audio loaded! Shape: {waveform.shape}, Sample rate: {sampling_rate}")
@@ -29,7 +26,7 @@ def speech_to_text(audio_file_path):
     audio_input = {"raw": waveform.numpy()[0], "sampling_rate": 16000} 
 
     # Generate transcription
-    prediction = pipe(audio_input, batch_size=16)["text"]
+    prediction = pipe(audio_input, batch_size=16, language='en')["text"]
 
     # Output the transcription
     return prediction

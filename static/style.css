@@ -76,6 +76,18 @@ h1 {
     cursor: pointer;
 }
 
+#topic-input {
+    padding: 12px;
+    font-size: 18px;
+    width: 300px;
+    border: 2px solid #db593c;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 150px;
+    display: block;
+}
+
 #start-button {
     width: 150px; /* Set width and height to create a perfect circle */
     height: 150px;
