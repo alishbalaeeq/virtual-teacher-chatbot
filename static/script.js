@@ -1,7 +1,7 @@
 const startButton = document.getElementById('start-button');
 const recordButton = document.getElementById('record-button');
 const chatHistory = document.getElementById('chat-history');
-const topicInput = document.getElementById('topic-input');  // Assuming you have an input field for topics
+const topicInput = document.getElementById('topic-input'); 
 
 let isRecording = false;
 
