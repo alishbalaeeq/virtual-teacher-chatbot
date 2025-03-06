@@ -11,6 +11,10 @@ let audioChunks = [];
 // Hide the record button initially
 recordButton.style.display = 'none';
 
+function scrollToBottom() {
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     startButton.addEventListener('click', async function() {
         const topic = topicInput.value.trim();
@@ -57,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
             messageContainer.appendChild(audioElement);
             chatHistory.appendChild(messageContainer);
 
-            // Ensure the chat history scrolls to the latest message
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            // ✅ Auto-scroll to the latest message
+            scrollToBottom();
 
             // Hide loading message & show record button after lecture is generated
             loadingMessage.style.display = 'none';
@@ -171,3 +175,5 @@ async function sendAudioToServer(blob) {
         console.error('Error sending audio to server:', err);
     }
 }
+
+
